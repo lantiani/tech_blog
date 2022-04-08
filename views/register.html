@@ -11,8 +11,8 @@
 <body>
     <div class="login">
         <h1>小猪博客注册系统</h1>
-        <form method="get" action="/login" id="form">
-            <input type="text" name="username" placeholder="Username" />
+        <form method="post" action="/register" id="form">
+            <input type="text" name="name" placeholder="Username" />
             <input type="password" name="password" placeholder="Password"  />
             <button type="submit" id="loginBtn" class="btn btn-primary btn-block btn-large">up Login</button>
         </form>
@@ -27,10 +27,11 @@
             type:'post',
             url:'http://127.0.0.1:3000/register',
             data:{
-                name:$('input[name="username"]').val(),
+                name:$('input[name="name"]').val(),
                 pass:$('input[name="password"]').val()
             }
         })
+        console.log($('input[name="name"]').val());
         // return false;
     })
 </script>
