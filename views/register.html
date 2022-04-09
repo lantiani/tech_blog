@@ -11,7 +11,7 @@
 <body>
     <div class="login">
         <h1>小猪博客注册系统</h1>
-        <form method="post" action="/register" id="form">
+        <form id="form">
             <input type="text" name="name" placeholder="Username" />
             <input type="password" name="password" placeholder="Password"  />
             <button type="submit" id="loginBtn" class="btn btn-primary btn-block btn-large">up Login</button>
@@ -21,18 +21,33 @@
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/layui/layui.js"></script>
 <script>
+    let nameVal = $('input[name="name"]'),
+        passVal = $('input[name="password"]')
+    
     $("#loginBtn").on('click',()=>{
+        if(!nameVal.val() && !passVal.val()) {
+            layer.msg('账号或密码不能为空',{icon:5});
+            return false;
+        }
         // layer.msg('login')
         $.ajax({
             type:'post',
-            url:'http://127.0.0.1:3000/register',
+            url:'http://127.0.0.1:3000/registers',
             data:{
-                name:$('input[name="name"]').val(),
-                pass:$('input[name="password"]').val()
+                name:nameVal.val(),
+                pass:passVal.val()
+            }
+        }).then(res=>{
+            if(res.code == 0) {
+                layer.msg(res.msg,{icon:1});
+                setTimeout(()=>{
+                    location.href = '/login';
+                },500)
+            } else {
+                layer.msg(res.msg,{icon:2})
             }
         })
-        console.log($('input[name="name"]').val());
-        // return false;
+        return false;
     })
 </script>
 </html>

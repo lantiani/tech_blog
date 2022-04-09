@@ -12,7 +12,7 @@
     <div class="login">
         <h1>小猪博客管理系统</h1>
         <form method="post" id="form">
-            <input type="text" name="username" placeholder="Username" />
+            <input type="text" name="name" placeholder="Username" />
             <input type="password" name="password" placeholder="Password"  />
             <button type="submit" id="loginBtn" class="btn btn-primary btn-block btn-large">Login In</button>
         </form>
@@ -21,14 +21,30 @@
 <script src="/assets/js/jquery.min.js"></script>
 <script src="/assets/layui/layui.js"></script>
 <script>
+       let nameVal = $('input[name="name"]'),
+        passVal = $('input[name="password"]')
+    
     $("#loginBtn").on('click',()=>{
+        if(!nameVal.val() && !passVal.val()) {
+            layer.msg('账号或密码不能为空',{icon:5});
+            return false;
+        }
         // layer.msg('login')
         $.ajax({
-            type:'post',
+            type:'get',
             url:'http://127.0.0.1:3000/entry',
             data:{
-                name:$('input[name="username"]').val(),
-                pass:$('input[name="password"]').val()
+                name:nameVal.val(),
+                pass:passVal.val()
+            }
+        }).then(res=>{
+            if(res.code == 0) {
+                layer.msg(res.msg,{icon:1});
+                setTimeout(()=>{
+                    location.href = '/index';
+                },500)
+            } else {
+                layer.msg(res.msg,{icon:2})
             }
         })
         return false;

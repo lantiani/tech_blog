@@ -11,10 +11,17 @@ router.get('/catelist',blogController.catelist);
 router.get('/artlist',blogController.artlist);
 // 登录页
 router.get('/login',blogController.login);
-
-router.get('/upLogin',blogController.upLogin);
-router.post('/entry',blogController.entry);
 // 注册页
-router.post('/register',blogController.register);
+router.get('/register',blogController.register);
+// 成功登录逻辑
+router.get('/entry',blogController.entry);
+// 注册逻辑
+router.post('/registers',blogController.registers);
+// 分类列表获取数据
+router.get('/cateData',blogController.cateData);
+// 修改列表数据
+router.post('/updCateData',blogController.updCateData);+
+// 删除列表数据
+router.get('/delCateData',blogController.delCateData);
 
 module.exports = router;
