@@ -11,10 +11,11 @@
 <body>
     <div class="login">
         <h1>小猪博客管理系统</h1>
-        <form method="post" id="form">
-            <input type="text" name="name" placeholder="Username" />
+        <form id="form">
+            <input type="text" name="name" placeholder="Username" id="name" />
             <input type="password" name="password" placeholder="Password"  />
             <button type="submit" id="loginBtn" class="btn btn-primary btn-block btn-large">Login In</button>
+            <button type="submit" id="upLoginBtn" style="margin-top: 10px;">up Login</button>
         </form>
     </div>
 </body>
@@ -23,6 +24,7 @@
 <script>
        let nameVal = $('input[name="name"]'),
         passVal = $('input[name="password"]')
+        console.log(document.getElementById('name').value)
     
     $("#loginBtn").on('click',()=>{
         if(!nameVal.val() && !passVal.val()) {
@@ -38,6 +40,7 @@
                 pass:passVal.val()
             }
         }).then(res=>{
+            console.log(res);
             if(res.code == 0) {
                 layer.msg(res.msg,{icon:1});
                 setTimeout(()=>{
@@ -47,6 +50,11 @@
                 layer.msg(res.msg,{icon:2})
             }
         })
+        return false;
+    })
+
+    $('#upLoginBtn').click(function(){
+        location.href = '/register';
         return false;
     })
 </script>

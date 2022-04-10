@@ -16,6 +16,7 @@
     <div class="layui-body">
       <!-- 内容主体区域 -->
       <div style="padding: 15px;">
+        <a class="layui-btn layui-btn-lg layui-btn-radius layui-btn-normal " href="./addDate">+</a>
         <table id="demo" lay-filter="test"></table>
       </div>
     </div>
@@ -43,7 +44,6 @@
           , {
             fixed: "right", width: 120, title: '操作', templet: (obj) => {
               return `
-              <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
               <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del" class="del">删除</a>
           `
             }
