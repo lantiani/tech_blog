@@ -1,3 +1,46 @@
+<style>
+  .layui-layer-title {
+    border-bottom-width: 0px;  }
+
+  #picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .avatar {
+    display: flex;
+    column-gap: 20px;
+  }
+
+  .avatar button {
+    border-radius: 50px;
+    border: 1px solid #eceff4;
+    background-color: #fff;
+    border-radius: 20px;
+    line-height: 24px;
+    font-size: 14px;
+    padding: 0 5px;
+    cursor: pointer;
+  }
+
+  #file {
+    display: none;
+  }
+
+  .cont,#passForm {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+
+  
+</style>
+
+<!-- 公共头部 -->
 <div class="layui-header" id="header">
   <div class="layui-logo layui-hide-xs" id="logoText"></div>
   <!-- 头部区域（可配合layui 已有的水平导航） -->
@@ -6,7 +49,6 @@
     <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
       <i class="layui-icon layui-icon-spread-left"></i>
     </li>
-
     <li class="layui-nav-item layui-hide-xs"><a href="">nav 1</a></li>
     <li class="layui-nav-item layui-hide-xs"><a href="">nav 2</a></li>
     <li class="layui-nav-item layui-hide-xs"><a href="">nav 3</a></li>
@@ -22,13 +64,13 @@
   <ul class="layui-nav layui-layout-right">
     <li class="layui-nav-item layui-hide layui-show-md-inline-block">
       <a href="javascript:;">
-        <img src="https://img2.baidu.com/it/u=1012304310,3936720750&fm=26&fmt=auto&gp=0.jpg" class="layui-nav-img">
-        xiaoluo
+        <img src="" id="userImg" class="layui-nav-img">
+        <span id="userName"></span>
       </a>
       <dl class="layui-nav-child">
-        <dd><a href="">个人信息</a></dd>
-        <dd><a href="">修改密码</a></dd>
-        <dd><a href="./login.html">退出</a></dd>
+        <dd><a href="javascript:;" id="userInfo">个人信息</a></dd>
+        <dd><a href="javascript:;" id="rePassBtn">修改密码</a></dd>
+        <dd><a href="/logOut" id="logOut">退出</a></dd>
       </dl>
     </li>
     <li class="layui-nav-item" lay-header-event="menuRight" lay-unselect>
@@ -38,15 +80,84 @@
     </li>
   </ul>
 </div>
+<!-- 个人信息弹框 -->
+<div class="cont" style="display: none;">
+  <form class="layui-form" id="userInfos" action="">
+    <div class="layui-form-item">
+      <label class="layui-form-label">头像</label>
+      <div class="layui-input-block">
+        <div class="avatar">
+          <input type="file" name='picture' id="file" onchange="fileChange(this,'#picture')">
+          <img src="" alt="" id="picture">
+          <div>
+            <button id="test">上传新头像</button>
+            <p>支持jpg、png、gif格式</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">用户名</label>
+      <div class="layui-input-block">
+        <input type="text" name="username" disabled lay-verify="title" autocomplete="off" class="layui-input"
+          id="usersNfo">
+      </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">个人信息</label>
+      <div class="layui-input-block">
+        <input type="text" name="userIntro" lay-verify="title" autocomplete="off" class="layui-input">
+      </div>
+    </div>
+    <button type="button" class="layui-btn layui-btn-normal" lay-filter="demo1" id="userBtn">提交</button>
+  </form>
+</div>
+<!-- 修改密码弹框 -->
+<div id="passBox" style="display: none;">
+    <form id="passForm">
+      <div class="layui-form-item">
+        <label class="layui-form-label">旧密码</label>
+        <div class="layui-input-block">
+          <input type="password" name="oldPass" lay-verify="title" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">新密码</label>
+        <div class="layui-input-block">
+          <input type="password" name="newPass" lay-verify="title" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div class="layui-form-item">
+        <label class="layui-form-label">确认密码</label>
+        <div class="layui-input-block">
+          <input type="password" name="confirmPass" lay-verify="title" autocomplete="off" class="layui-input">
+        </div>
+      </div>
+      <div id="passMsg" style=" margin: 10px 40px;"></div>
+      <button type="button" class="layui-btn layui-btn-normal" lay-filter="demo1" id="passBtn">提交</button>
+    </form>
+</div>
 <script src="../../assets/js/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script>
   let logText = localStorage.getItem('logoText');
+  // 进入页面设置logo
   $('#logoText').text(logText)
-
+  $('input[name="name"]').val(logText);
+  let userS =JSON.parse(Cookies.get('userInfos'))
+  let { id, avatar, intro,username } = userS ;
+  // 进入页面赋值个人信息&头像
+  $('input[name="userIntro"]').val(intro);
+  $('#userImg').attr('src', `upload/${avatar}`);
+  $('#picture').attr('src', `upload/${avatar}`);
+  // 设置登录用户名
+  // let username = Cookies.get('username');
+  $('#userName').text(username);
+  // 获取主题cookie
   let color = Cookies.get('color');
-  // $('.layui-bg-black').removeClass('layui-bg-black');
+  // 页面加载完毕渲染主题
   window.onload = () => {
+    $('#setName').val(logText);
     if (color) {
       $('#header').css('background-color', color);
       $('.layui-side-scroll').css('background-color', color);
@@ -55,4 +166,107 @@
       $('.layui-nav').css('background-color', color);
     }
   }
+  // 退出返回登录页
+  $('#logOut').click(() => {
+    $.post('/logOut').then(() => {
+      location.href = '/login';
+    })
+  })
+
+
+  // 头像回显base64
+  let picFile;
+  function fileChange(ele, img) {
+    picFile = ele.files[0];// 图片二进制
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(picFile);
+    fileReader.onload = function (e) {
+      $(img).attr('src', e.target.result);
+    }
+  }
+  let logoText = document.getElementById('logoText');
+  $.get('/getLogoText').then(res => {
+    res.find(data => {
+      if (data.name === 'logoText') {
+        $('#logoText').text(data.val);
+        localStorage.setItem('logoText', data.val);
+      }
+    })
+  })
+
+  // 个人信息弹框
+  $('#userInfo').click(() => {
+    $('input[name="username"]').val(username)
+    $('input[name="userIntro"]').val(intro)
+    console.log(avatar,'avatar');
+    layer.open({
+      type: 1,
+      area: ['420px', '340px'], //宽高
+      content: $('.cont'),
+    });
+  })
+
+  // 打开上传文件按钮
+  $(document).on('click', '#test', function () {
+    document.getElementById('file').click();
+    return false;
+  })
+  $(document).on('click', '#picture', function () {
+    document.getElementById('file').click();
+    return false;
+  })
+  $('#picture').attr('src', `upload/${avatar}`)
+  $('#userBtn').click(function () {
+    let formData = new FormData($('#userInfos')[0]);
+    formData.set('is_num',picFile ? 1 : 0);
+    $.ajax({
+      type: 'post',
+      url: '/updUserInfo',
+      data: formData,
+      contentType: false,
+      processData: false
+    }).then(res => {
+      if(res.code === 0) {
+        let {result} = res;
+      Cookies.set('userInfos', JSON.stringify(result), {
+        expires: new Date(Date.now() + 3 * 3600000)
+      });
+      let { avatar } = JSON.parse(Cookies.get('userInfos'));
+      $('#userImg').attr('src', `upload/${avatar}`)
+      }
+      layer.msg(res.msg,{icon:6})
+    })
+  })
+
+  // 修改密码弹框
+  $('#rePassBtn').click(function () {
+    layer.open({
+      title:'修改密码',
+      type: 1,
+      area: ['420px', '340px'], //宽高
+      content: $('#passBox'),
+    });
+  })
+
+  // 提交修改密码
+  $('#passBtn').click(function() {
+    let data = $("#passForm").serialize();
+    if($('input[name="newPass"]').val() !== $('input[name="confirmPass"]').val()) {
+      $('#passMsg').html('<span style="color:red;">两次密码输入不一致</span>')
+      return;
+    }
+    $('#passMsg').html('<span style="color:green;">两次密码输入一致</span>')
+    $.ajax({
+      type:'post',
+      url:'/updPass',
+      data,
+    }).then(res=>{
+      let {code,msg} = res;
+      if(code === 0) {
+        $('#passMsg').html(`<span style="color:green;">${msg}</span>`)
+      } else {
+        $('#passMsg').html(`<span style="color:red;">${msg}</span>`)
+      }
+    })
+  })
 </script>

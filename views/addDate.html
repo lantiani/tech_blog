@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../assets/layui/css/layui.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">分类名称：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="cate_name" required lay-verify="required" placeholder="请输入分类名称"
+                    autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序：</label>
+            <div class="layui-input-inline">
+                <input type="text" name="orderBy" required lay-verify="required" placeholder="请输入排序" autocomplete="off"
+                    class="layui-input">
+            </div>
+        </div>
+
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="formDemo">添加</button>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+    </form>
+
+</body>
+<script src="../assets/layui/layui.js"></script>
+<script>
+    //Demo
+    layui.use('form', function () {
+        var form = layui.form,
+            $ = layui.jquery;
+        //监听提交
+        form.on('submit(formDemo)', function (data) {
+            $.ajax({
+                type: 'post',
+                url: '/addDates',
+                data: data.field
+            }).then(res => {
+                if (res.code === 0) {
+                    layer.msg(res.msg, { icon: 6 });
+                    setTimeout(() => {
+                        location.href = '/catelist'
+                    }, 500)
+                } else {
+                    layer.msg(res.msg, { icon: 5 })
+                }
+            })
+            return false;
+        });
+    });
+</script>
+
+</html>

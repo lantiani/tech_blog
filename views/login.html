@@ -20,13 +20,13 @@
     </div>
 </body>
 <script src="/assets/js/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 <script src="/assets/layui/layui.js"></script>
 <script>
        let nameVal = $('input[name="name"]'),
         passVal = $('input[name="password"]')
-        console.log(document.getElementById('name').value)
-    
-    $("#loginBtn").on('click',()=>{
+        
+        $("#loginBtn").on('click',()=>{
         if(!nameVal.val() && !passVal.val()) {
             layer.msg('账号或密码不能为空',{icon:5});
             return false;
@@ -40,9 +40,9 @@
                 pass:passVal.val()
             }
         }).then(res=>{
-            console.log(res);
             if(res.code == 0) {
                 layer.msg(res.msg,{icon:1});
+                Cookies.set('userInfos',res.info[0],{expires:2});
                 setTimeout(()=>{
                     location.href = '/index';
                 },500)

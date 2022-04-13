@@ -1,4 +1,3 @@
-const { render } = require('express/lib/response');
 const path = require('path');
 const blogController = {};
 const query = require('../model/blogModel');
@@ -41,7 +40,22 @@ blogController.getLogoText = async (req, res) => {
     let result = await query(sql)
     res.send(result);
 }
-
+// 修改用户信息
+// blogController.userInfos = async (req, res) => {
+//     // let {id,intro,avatar} = req.body;
+//     console.log(req.body);
+//     // let file = req.files;
+//     // console.log(file);
+//     // // 解构接收文件属性
+//     // let { originalname, filename } = file[0];
+//     // // 将传过来的文件名改为 utf-8 格式
+//     // let fileName = `${Date.now()}${originalname}`;
+//     // fs.renameSync(path.join(`${path.dirname(__dirname)}/upload/${filename}`), path.join(`${path.dirname(__dirname)}/upload/${fileName}`));
+//     // console.log(req.body);
+//     // const sql = `update users set intro='${intro}',avatar='${avatar}' where id=${id}`;
+//     // let result = await query(sql);
+//     res.send('result');
+// }
 // 分类列表
 blogController.catelist = (req, res) => {
     res.render('catelist.html');
@@ -57,10 +71,10 @@ blogController.cateData = async (req, res) => {
     let result = await query(sql);
     let successInfo = {
         code: 0,
-        msg: '注册成功',
+        msg: '获取成功',
         data: result
     }
-    res.send(successInfo)
+    res.send(successInfo);
 }
 blogController.addDate = async (req, res) => {
     res.sendFile(`${pathDir}addDate.html`)
@@ -80,12 +94,12 @@ blogController.addDates = async (req, res) => {
     }
     if(result.affectedRows > 0) {
         res.send(successInfo)
+          
     } else {
         res.send(failInfo)
     }
     
 }
-
 // 修改列表数据
 blogController.updCateData = async (req, res) => {
     let { cate_name, orderBy } = req.body;
@@ -107,7 +121,6 @@ blogController.updCateData = async (req, res) => {
     }
 
 }
-
 // 删除列表数据
 blogController.delCateData = async (req, res) => {
     let { cate_id } = req.query;

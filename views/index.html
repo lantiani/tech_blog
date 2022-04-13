@@ -7,15 +7,56 @@
   <title>德德后台管理系统</title>
   <link rel="stylesheet" href="/assets/layui/css/layui.css">
 </head>
+<!-- <style>
+  .layui-layer-title {
+    border-bottom-width: 0px;
+  }
+
+  #picture {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  .avatar {
+    display: flex;
+    column-gap: 20px;
+  }
+
+  .avatar button {
+    border-radius: 50px;
+    border: 1px solid #eceff4;
+    background-color: #fff;
+    border-radius: 20px;
+    line-height: 24px;
+    font-size: 14px;
+    padding: 0 5px;
+    cursor: pointer;
+  }
+
+  #file {
+    display: none;
+  }
+
+  .cont {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+</style> -->
+
 
 <body>
   <div class="layui-layout layui-layout-admin">
     <!-- 模板引擎 -->
     {{include "./common/header.html"}}
     {{include "./common/side.html"}}
-    <div class="layui-body">
-      <!-- 内容主体区域 -->
-      <div style="padding: 15px;">内容主体区域.</div>
+    <!-- 内容主体区域 -->
+    <div style="padding: 15px;">
+      
     </div>
 
     <div class="layui-footer">
@@ -27,15 +68,70 @@
 </body>
 <script src="/assets/layui/layui.js"></script>
 <script>
-  // localStorage.setItem('age',18);
-  let logoText = document.getElementById('logoText');
-  $.get('/getLogoText').then(res=>{
-    res.find(data => {
-        if(data.name === 'logoText') {
-          $('#logoText').text(data.val);
-          localStorage.setItem('logoText',data.val);
-        }
-    })
-  })
+  // console.log(fileName, 'fileName11');
+  // $('#picture').attr('src', `upload/${fileName}`);
+  // let picFile;
+
+  // function fileChange(ele, img, fn) {
+
+  //   picFile = ele.files[0];// 图片二进制
+  //   const fileReader = new FileReader();
+  //   fileReader.readAsDataURL(picFile);
+  //   fileReader.onload = function (e) {
+  //     $(img).attr('src', e.target.result);
+  //     console.log(ele);
+  //     fn.call(ele)
+  //   }
+  // }
+  // let logoText = document.getElementById('logoText');
+  // $.get('/getLogoText').then(res => {
+  //   res.find(data => {
+  //     if (data.name === 'logoText') {
+  //       $('#logoText').text(data.val);
+  //       localStorage.setItem('logoText', data.val);
+  //     }
+  //   })
+  // })
+
+  // $('#userInfo').click(() => {
+  //   $('input[name="username"]').val(username)
+  //   $('input[name="userIntro"]').val(intro)
+  //   layer.open({
+  //     type: 1,
+  //     area: ['420px', '340px'], //宽高
+  //     content: $('.cont'),
+  //   });
+
+  //   // $('#picture').attr('src',avatar)
+  // })
+
+  // // 打开上传文件按钮
+  // $(document).on('click', '#test', function () {
+  //   document.getElementById('file').click();
+  //   return false;
+  // })
+  // $(document).on('click', '#picture', function () {
+  //   document.getElementById('file').click();
+  //   return false;
+  // })
+  // $('#picture').attr('src', `upload/${fileName}`)
+  // $('#userBtn').click(function () {
+  //   let formData = new FormData($('#userInfos')[0]);
+  //   $.ajax({
+  //     type: 'post',
+  //     url: '/updUserInfo',
+  //     data: formData,
+  //     contentType: false,
+  //     processData: false
+  //   }).then(res => {
+  //     Cookies.set('userInfos', JSON.stringify(res), {
+  //       expires: new Date(Date.now() + 3 * 3600000)
+  //     })
+  //     let { fileName } = JSON.parse(Cookies.get('userInfos'));
+  //     $('#userImg').attr('src', `upload/${fileName}`)
+
+  //   })
+  // })
 </script>
+
 </html>
