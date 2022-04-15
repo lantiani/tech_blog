@@ -1,6 +1,9 @@
+<link href="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/css/style.css" rel="stylesheet">
+
 <style>
   .layui-layer-title {
-    border-bottom-width: 0px;  }
+    border-bottom-width: 0px;
+  }
 
   #picture {
     width: 50px;
@@ -29,15 +32,14 @@
     display: none;
   }
 
-  .cont,#passForm {
+  .cont,
+  #passForm {
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
     margin-top: 20px;
   }
-
-  
 </style>
 
 <!-- 公共头部 -->
@@ -114,44 +116,46 @@
 </div>
 <!-- 修改密码弹框 -->
 <div id="passBox" style="display: none;">
-    <form id="passForm">
-      <div class="layui-form-item">
-        <label class="layui-form-label">旧密码</label>
-        <div class="layui-input-block">
-          <input type="password" name="oldPass" lay-verify="title" autocomplete="off" class="layui-input">
-        </div>
+  <form id="passForm">
+    <div class="layui-form-item">
+      <label class="layui-form-label">旧密码</label>
+      <div class="layui-input-block">
+        <input type="password" name="oldPass" lay-verify="title" autocomplete="off" class="layui-input">
       </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">新密码</label>
-        <div class="layui-input-block">
-          <input type="password" name="newPass" lay-verify="title" autocomplete="off" class="layui-input">
-        </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">新密码</label>
+      <div class="layui-input-block">
+        <input type="password" name="newPass" lay-verify="title" autocomplete="off" class="layui-input">
       </div>
-      <div class="layui-form-item">
-        <label class="layui-form-label">确认密码</label>
-        <div class="layui-input-block">
-          <input type="password" name="confirmPass" lay-verify="title" autocomplete="off" class="layui-input">
-        </div>
+    </div>
+    <div class="layui-form-item">
+      <label class="layui-form-label">确认密码</label>
+      <div class="layui-input-block">
+        <input type="password" name="confirmPass" lay-verify="title" autocomplete="off" class="layui-input">
       </div>
-      <div id="passMsg" style=" margin: 10px 40px;"></div>
-      <button type="button" class="layui-btn layui-btn-normal" lay-filter="demo1" id="passBtn">提交</button>
-    </form>
+    </div>
+    <div id="passMsg" style=" margin: 10px 40px;"></div>
+    <button type="button" class="layui-btn layui-btn-normal" lay-filter="demo1" id="passBtn">提交</button>
+  </form>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@wangeditor/editor@latest/dist/index.min.js"></script>
 <script src="../../assets/js/jquery.min.js"></script>
+<script src="/assets/layui/layui.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
 <script>
   let logText = localStorage.getItem('logoText');
   // 进入页面设置logo
   $('#logoText').text(logText)
   $('input[name="name"]').val(logText);
-  let userS =JSON.parse(Cookies.get('userInfos'))
-  let { id, avatar, intro,username } = userS ;
+  let userS = JSON.parse(Cookies.get('userInfos'));
+  let { id, avatar, intro, username } = userS;
   // 进入页面赋值个人信息&头像
   $('input[name="userIntro"]').val(intro);
   $('#userImg').attr('src', `upload/${avatar}`);
   $('#picture').attr('src', `upload/${avatar}`);
   // 设置登录用户名
-  // let username = Cookies.get('username');
   $('#userName').text(username);
   // 获取主题cookie
   let color = Cookies.get('color');
@@ -172,7 +176,6 @@
       location.href = '/login';
     })
   })
-
 
   // 头像回显base64
   let picFile;
@@ -198,7 +201,7 @@
   $('#userInfo').click(() => {
     $('input[name="username"]').val(username)
     $('input[name="userIntro"]').val(intro)
-    console.log(avatar,'avatar');
+    console.log(avatar, 'avatar');
     layer.open({
       type: 1,
       area: ['420px', '340px'], //宽高
@@ -218,7 +221,7 @@
   $('#picture').attr('src', `upload/${avatar}`)
   $('#userBtn').click(function () {
     let formData = new FormData($('#userInfos')[0]);
-    formData.set('is_num',picFile ? 1 : 0);
+    formData.set('is_num', picFile ? 1 : 0);
     $.ajax({
       type: 'post',
       url: '/updUserInfo',
@@ -226,22 +229,22 @@
       contentType: false,
       processData: false
     }).then(res => {
-      if(res.code === 0) {
-        let {result} = res;
-      Cookies.set('userInfos', JSON.stringify(result), {
-        expires: new Date(Date.now() + 3 * 3600000)
-      });
-      let { avatar } = JSON.parse(Cookies.get('userInfos'));
-      $('#userImg').attr('src', `upload/${avatar}`)
+      if (res.code === 0) {
+        let { result } = res;
+        Cookies.set('userInfos', JSON.stringify(result), {
+          expires: new Date(Date.now() + 3 * 3600000)
+        });
+        let { avatar } = JSON.parse(Cookies.get('userInfos'));
+        $('#userImg').attr('src', `upload/${avatar}`)
       }
-      layer.msg(res.msg,{icon:6})
+      layer.msg(res.msg, { icon: 6 })
     })
   })
 
   // 修改密码弹框
   $('#rePassBtn').click(function () {
     layer.open({
-      title:'修改密码',
+      title: '修改密码',
       type: 1,
       area: ['420px', '340px'], //宽高
       content: $('#passBox'),
@@ -249,24 +252,25 @@
   })
 
   // 提交修改密码
-  $('#passBtn').click(function() {
+  $('#passBtn').click(function () {
     let data = $("#passForm").serialize();
-    if($('input[name="newPass"]').val() !== $('input[name="confirmPass"]').val()) {
+    if ($('input[name="newPass"]').val() !== $('input[name="confirmPass"]').val()) {
       $('#passMsg').html('<span style="color:red;">两次密码输入不一致</span>')
       return;
     }
     $('#passMsg').html('<span style="color:green;">两次密码输入一致</span>')
     $.ajax({
-      type:'post',
-      url:'/updPass',
+      type: 'post',
+      url: '/updPass',
       data,
-    }).then(res=>{
-      let {code,msg} = res;
-      if(code === 0) {
+    }).then(res => {
+      let { code, msg } = res;
+      if (code === 0) {
         $('#passMsg').html(`<span style="color:green;">${msg}</span>`)
       } else {
         $('#passMsg').html(`<span style="color:red;">${msg}</span>`)
       }
     })
   })
+
 </script>

@@ -45,8 +45,8 @@
             底部固定区域
         </div>
     </div>
-    <script src="/assets/layui/layui.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <!-- <script src="/assets/layui/layui.js"></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script> -->
     <script>
         //JS 
         layui.use('form', function () {
@@ -76,6 +76,7 @@
             let id = $(this).index() + 1;
             $.get(`/theme?id=${id}`).then(res => {
                 let color = res[0].color;
+                Cookies.remove('color');
                 Cookies.set('color', color, { expires: 47 });
             });
             location.reload();

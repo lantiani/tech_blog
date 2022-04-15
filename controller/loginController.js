@@ -6,11 +6,11 @@ const query = require('../model/blogModel');
 require('dotenv').config();
 
 const pathDir = path.join(path.dirname(__dirname), 'views/');
-
+// 登录页
 loginController.login = (req, res) => {
     res.sendFile(`${pathDir}login.html`)
 }
-
+// 登陆判断
 loginController.entry = async (req, res) => {
     let { name, pass } = req.query;
     pass = md5(`${pass}${process.env.SALT}`);
@@ -39,25 +39,24 @@ loginController.entry = async (req, res) => {
         res.send(failInfo)
     }
 }
+// 修个个人信息
 loginController.updUserInfo = async (req, res) => {
     // session未更新 获取旧图片路径 avatar
     let { id,avatar } = req.session.is_exist;
-    console.log(avatar);
     let { userIntro,is_num } = req.body;
-    let sql, fileName = '',data;
+    let sql, fileName = '';
     let oldPath = path.join(path.dirname(__dirname), `/upload/${avatar}`);
     if (is_num == 1) {
-    let file = req.files[0]
+    let file = req.files[0];
     let { originalname, filename } = file;
     fileName = `${Date.now()}${originalname}`
     fs.renameSync(path.join(`${path.dirname(__dirname)}/upload/${filename}`), path.join(`${path.dirname(__dirname)}/upload/${fileName}`));
     sql = `update users set intro='${userIntro}',avatar='${fileName}' where id=${id}`;
-    data = await query(sql);
     fs.unlink(oldPath,()=>{})
     } else {
         sql = `update users set intro='${userIntro}' where id=${id}`;
-        data = await query(sql);
     }
+    const data = await query(sql);
     let successInfo = {
         avatar:fileName,
         data,
@@ -72,7 +71,7 @@ loginController.updUserInfo = async (req, res) => {
         res.json(successInfo);
     })
 }
-
+// 修改密码
 loginController.updPass = async (req, res) => {
     let {id} = req.session.is_exist;
     let {oldPass,confirmPass} = req.body;
@@ -95,6 +94,7 @@ loginController.updPass = async (req, res) => {
         })
     }
 }
+// 退出登陆
 loginController.logOut = async (req, res) => {
     req.session.destroy((err) => {
         if (err) throw err;

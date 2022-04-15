@@ -6,6 +6,7 @@ const blogController = require('../controller/blogController.js')
 const enrollController = require('../controller/enrollController.js')
 const loginController = require('../controller/loginController.js')
 const artlistController = require('../controller/artlistController.js')
+const indexController = require('../controller/indexController.js')
 
 router.use(multer({ dest: './upload/' }).array('picture'));
 // 主页
@@ -17,8 +18,14 @@ router.post('/updPass',loginController.updPass);
 router.post('/updUserInfo',loginController.updUserInfo);
 // 分类列表
 router.get('/catelist',blogController.catelist);
-// 文章列表
+// 文章列表页面
 router.get('/artlist',blogController.artlist);
+// 文章列表获取数据
+router.get('/addArtlist',artlistController.addArtlist);
+// 文章列表添加数据
+router.post('/addArtData',artlistController.addArtData);
+// 获取分类
+router.get('/getCateData',artlistController.getCateData);
 
 router.get('/getArtData',artlistController.getArtData);
 
@@ -52,5 +59,7 @@ router.post('/systemCations',blogController.systemCations);
 router.post('/updCateData',blogController.updCateData);
 // 删除列表数据
 router.get('/delCateData',blogController.delCateData);
+// 首页数据可视化
+router.get('/apiData',indexController.apiData);
 
 module.exports = router;
