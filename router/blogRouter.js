@@ -22,8 +22,14 @@ router.get('/catelist',blogController.catelist);
 router.get('/artlist',blogController.artlist);
 // 文章列表获取数据
 router.get('/addArtlist',artlistController.addArtlist);
+// 文章列表回显数据
+router.get('/editArtlist',artlistController.editArtlist);
+router.post('/editArtData',artlistController.editArtData);
+router.get('/editGetArtData',artlistController.editGetArtData);
 // 文章列表添加数据
 router.post('/addArtData',artlistController.addArtData);
+// 文章列表删除数据
+router.post('/delArtData',artlistController.delArtData);
 // 获取分类
 router.get('/getCateData',artlistController.getCateData);
 

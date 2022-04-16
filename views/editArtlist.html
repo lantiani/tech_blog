@@ -70,11 +70,12 @@
         </div>
     </div>
 
-
-
 </body>
 <script src="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js"></script>
 <script>
+    let reg = /\?id=(\d+)/;
+    let oldPic;
+    let search = location.search.match(reg);
     let editor;
     function initEditor() {
         const E = window.wangEditor
@@ -84,7 +85,6 @@
         editor.config.uploadImgMaxSize = 5 * 1024 * 1024 // 5M
         editor.create()
     }
-
     // 初始化富文本编辑器
     initEditor();
 
@@ -92,13 +92,19 @@
     $("#upload").on('click', () => {
         $("#pic")[0].click();
     })
-
     layui.use(['form', 'layedit', 'laydate'], function () {
         const form = layui.form;
         // 默认加载所有的分类
         async function initCateData() {
-            const { data } = await $.get('/getCateData');
+            const data = await $.get('/editGetArtData?id=' + search[1]);
             console.log(data);
+            form.render('select');//需要渲染一下
+        }
+        initCateData();
+
+        // 根据id获取文章数据，进行回显
+        async function initCateData() {
+            const { data } = await $.get('/getCateData');
             let optionsHtml = '<option value="0">未分类</option>';
             data.forEach(item => {
                 const { cate_id, cate_name } = item;
@@ -106,22 +112,40 @@
             });
             // 赋值给下拉框
             $("#cate_id").html(optionsHtml)
-
             form.render('select');//需要渲染一下
+
+
+            const result = await $.get('/editGetArtData?id=' + search[1]);
+            let { status, title, content, author, pic, cate_id } = result
+            oldPic = pic;
+            status = status == 1 ? true : false
+            // 回显表单数据
+            form.val("example", {
+                title,
+                status,
+                cate_id
+            });
+            console.log(pic);
+            imgSrc = pic;
+            $("#preview").attr('src','/upload/'+pic);
+            editor.txt.html(result.content);
+            form.render('select');
         }
         initCateData();
-    });
 
-    // 提交表单数据
+        // 提交表单数据
     $("#submitForm").on('click', async () => {
         // 1. 获取数据（文本和二进制、富文本数据）
         const formData = new FormData($("#addArtForm")[0])
         // 获取富文本内容
         const content = editor.txt.html();
         formData.set('content', content);
+        formData.set('imgSrc', imgSrc);
+         
+        formData.set('pic', oldPic);
         // 2.发送请求
         const { code, msg } = await $.ajax({
-            url: "/addArtData",
+            url: "/editArtData?id="+search[1],
             type: 'post',
             data: formData,
             contentType: false,
@@ -129,10 +153,16 @@
         })
         // 3.提示
         layer.msg(msg)
-        if (code === 0) {
+        setTimeout(()=>{
+            if (code === 0) {
             location.href = '/artlist'
         }   
+        },500)
     })
+
+    });
+
+ 
 </script>
 
 </html>

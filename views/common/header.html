@@ -179,12 +179,16 @@
 
   // 头像回显base64
   let picFile;
+  let imgSrc;
+ 
   function fileChange(ele, img) {
     picFile = ele.files[0];// 图片二进制
     const fileReader = new FileReader();
     fileReader.readAsDataURL(picFile);
     fileReader.onload = function (e) {
       $(img).attr('src', e.target.result);
+      imgSrc =  picFile.name;
+      // console.dir(picFile.name);
     }
   }
   let logoText = document.getElementById('logoText');
