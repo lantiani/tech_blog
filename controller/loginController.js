@@ -3,6 +3,7 @@ const fs = require('fs');
 const md5 = require('md5');
 const loginController = {};
 const query = require('../model/blogModel');
+const { log } = require('console');
 require('dotenv').config();
 
 const pathDir = path.join(path.dirname(__dirname), 'views/');
@@ -27,11 +28,18 @@ loginController.entry = async (req, res) => {
     }
     // 查询数据库是否存在
     if (result.length === 1) {
+        log('设想')
         let {id} = result[0];
         const userSql = `select * from users where id = ${id}`;
         const result2 = await query(userSql)
+        
+        const sql2 = `select * from settings`;
+        const result3 = await query(sql2);
         req.session.is_exist = result2[0];
         res.cookie('userInfos', JSON.stringify(result[0]), {
+            expires: new Date(Date.now() + 3 * 3600000)
+        })
+        res.cookie('logoInfo', JSON.stringify(result3[0]), {
             expires: new Date(Date.now() + 3 * 3600000)
         })
         res.send(successInfo);

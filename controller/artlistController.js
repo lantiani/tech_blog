@@ -133,7 +133,7 @@ artlistController.addArtData = async (req, res) => {
         let file = req.files[0];
         let { originalname, filename } = file;
         let fileName = `${Date.now()}${originalname}`
-        add_date = moment().format('YYYY-MM-DD HH:mm:ss');
+        add_date = moment().format('YYYY-MM-DD');
         fs.renameSync(path.join(`${path.dirname(__dirname)}/upload/${filename}`), path.join(`${path.dirname(__dirname)}/upload/${fileName}`));
         sql = `insert into article(title,content,status,cate_id,add_date,pic,author)
     values('${title}','${content}','${status}','${cate_id}','${add_date}','${fileName}',${id})`;

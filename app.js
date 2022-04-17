@@ -15,6 +15,8 @@ app.use(express.urlencoded({
     extended: true
 })); // for parsing application/x-www-form-urlencoded
 const router = require('./router/blogRouter.js');
+const apiRouter = require('./router/apiRouter.js');
+const res = require('express/lib/response');
 
 // 初始化session相关设置
 app.use(session({
@@ -38,6 +40,7 @@ app.set('view engine', 'html');
 app.use('/assets', express.static(path.join(__dirname, 'assets')));
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
 
+app.use('/api',apiRouter);
 
 // 禁止翻墙中间件
 app.use((req, res, next) => {

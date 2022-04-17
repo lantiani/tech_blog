@@ -8,6 +8,7 @@
   <link rel="stylesheet" href="/assets/layui/css/layui.css">
   <link rel="stylesheet" href="../assets/css/lightbox.min.css">
 </head>
+
 <body>
   <div class="layui-layout layui-layout-admin">
     <!-- 导入公共头部 -->
@@ -24,7 +25,8 @@
             <div class="layui-input-block">
               <input type="text" id="keyword" autocomplete="off" placeholder="请输入标题" class="layui-input">
             </div>
-            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="search" style="height: 100%;">搜索</button>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="search"
+              style="height: 100%;">搜索</button>
           </div>
         </div>
         <table class="layui-hide" id="artlist" lay-filter="searchKey"></table>
@@ -40,8 +42,8 @@
         // 1. 获取关键字
         let keyword = $("#keyword").val()
         table.reload('artlist', {
-           //设定异步数据接口的额外参数
-           where:{keyword}
+          //设定异步数据接口的额外参数
+          where: { keyword }
         });
       })
 
@@ -82,10 +84,10 @@
           prev: '上一页',
           next: '下一页'
         }
-        
+
       });
 
-      table.on('tool(test)', function (obj) {
+      table.on('tool(searchKey)', function (obj) {
         var data = obj.data;
         if (obj.event === 'del') {
           layer.confirm('真的删除行么', async function (index) {
@@ -103,7 +105,10 @@
       });
 
 
-      function openPo(myData) {
+
+    });
+
+    function openPo(myData) {
       let { title, content, add_date, username } = myData;
       content = `<div style="padding:15px">
         <h2>${title}</h2>
@@ -117,7 +122,6 @@
         area: ['420px', '340px'], //宽高
       });
     }
-    });
   </script>
 </body>
 
