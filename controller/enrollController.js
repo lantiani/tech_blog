@@ -14,11 +14,6 @@ enrollController.register = (req, res) => {
 enrollController.registers = async (req, res) => {
     let { name, pass } = req.body;
     pass = md5(`${pass}${process.env.SALT}`);
-    console.log(pass);
-    // console.log(req.body, 'req'); 
-    // 查询数据库是否存在
-    // const uPassSql = `SELECT * FROM users WHERE password='${name}'`;
-
     const uNameSql = `SELECT * FROM users WHERE username='${name}'`;
     const sql = `insert into users(username,password)values('${name}','${pass}')`
     let resName = await query(uNameSql);
@@ -35,7 +30,6 @@ enrollController.registers = async (req, res) => {
         res.send(failInfo)
     } else {
         let result = await query(sql);
-        console.log(result);
         res.send(successInfo);
     }
 }

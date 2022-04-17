@@ -88,7 +88,6 @@
     // 初始化富文本编辑器
     initEditor();
 
-
     $("#upload").on('click', () => {
         $("#pic")[0].click();
     })
@@ -106,7 +105,6 @@
             });
             // 赋值给下拉框
             $("#cate_id").html(optionsHtml)
-
             form.render('select');//需要渲染一下
         }
         initCateData();

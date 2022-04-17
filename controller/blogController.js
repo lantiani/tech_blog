@@ -1,4 +1,5 @@
 const path = require('path');
+const fs = require('fs');
 const blogController = {};
 const query = require('../model/blogModel');
 const pathDir = path.join(path.dirname(__dirname), 'views/');
@@ -10,19 +11,37 @@ blogController.systemCation = (req, res) => {
     res.render('systemCation.html');
 }
 blogController.systemCations = async (req, res) => {
-    let {name} = req.body;
-    const sql = `update settings set val='${name}'`;
+    let {name,isImg,oldImg} = req.body;
+    console.log(isImg);
+    let sql, fileName = '';
+    let oldPath = path.join(path.dirname(__dirname), `/upload/${oldImg}`);
+    if (isImg != 0) {
+    let file = req.files[0];
+    let { originalname, filename } = file;
+    fileName = `${Date.now()}${originalname}`
+    fs.renameSync(path.join(`${path.dirname(__dirname)}/upload/${filename}`), path.join(`${path.dirname(__dirname)}/upload/${fileName}`));
+    sql = `update settings set val='${name}',pic='${fileName}'`;
+    fs.unlink(oldPath,()=>{})
+    } else {
+        sql = `update settings set val='${name}'`;
+    }
     const result = await query(sql);
+    const sql2 = `select * from settings`;
+    const result2 = await query(sql2);
     let successInfo = {
         code:0,
         msg:'添加成功',
-        data:result
+        data:result2[0]
     }
     let failInfo = {
         code: 1,
         msg: '删除失败',
     }
+
     if(result.affectedRows > 0) {
+        res.cookie('logoInfo', JSON.stringify(result2[0]), {
+            expires: new Date(Date.now() + 3 * 3600000)
+        })
         res.send(successInfo)
     } else {
         res.send(failInfo)
@@ -43,15 +62,12 @@ blogController.getLogoText = async (req, res) => {
 // 修改用户信息
 // blogController.userInfos = async (req, res) => {
 //     // let {id,intro,avatar} = req.body;
-//     console.log(req.body);
 //     // let file = req.files;
-//     // console.log(file);
 //     // // 解构接收文件属性
 //     // let { originalname, filename } = file[0];
 //     // // 将传过来的文件名改为 utf-8 格式
 //     // let fileName = `${Date.now()}${originalname}`;
 //     // fs.renameSync(path.join(`${path.dirname(__dirname)}/upload/${filename}`), path.join(`${path.dirname(__dirname)}/upload/${fileName}`));
-//     // console.log(req.body);
 //     // const sql = `update users set intro='${intro}',avatar='${avatar}' where id=${id}`;
 //     // let result = await query(sql);
 //     res.send('result');
@@ -60,12 +76,10 @@ blogController.getLogoText = async (req, res) => {
 blogController.catelist = (req, res) => {
     res.render('catelist.html');
 }
-
 // 文章列表
 blogController.artlist = (req, res) => {
     res.render('artlist.html');
 }
-
 blogController.cateData = async (req, res) => {
     const sql = `select * from category`;
     let result = await query(sql);
@@ -81,7 +95,6 @@ blogController.addDate = async (req, res) => {
 }
 blogController.addDates = async (req, res) => {
     let{cate_name,orderBy} = req.body;
-    console.log(req.body);
     const sql = `insert into category(cate_name,orderBy)values('${cate_name}','${orderBy}')`;
     const result = await query(sql);
     let successInfo = {
@@ -124,7 +137,6 @@ blogController.updCateData = async (req, res) => {
 // 删除列表数据
 blogController.delCateData = async (req, res) => {
     let { cate_id } = req.query;
-    console.log(cate_id);
     const sql = `delete from category where cate_id=${cate_id}`;
     let result = await query(sql);
     let successInfo = {

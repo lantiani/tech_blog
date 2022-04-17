@@ -101,5 +101,9 @@ loginController.logOut = async (req, res) => {
     });
     res.send('退出')
 }
-
+// 获取logo头像
+// loginController.getLogoImg = async (req, res) => {
+//     const sql = `select pic from settings`;
+// }
 module.exports = loginController;
+ 

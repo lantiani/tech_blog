@@ -8,7 +8,6 @@
   <link rel="stylesheet" href="/assets/layui/css/layui.css">
   <link rel="stylesheet" href="../assets/css/lightbox.min.css">
 </head>
-
 <body>
   <div class="layui-layout layui-layout-admin">
     <!-- 导入公共头部 -->
@@ -19,14 +18,33 @@
       <!-- 内容主体区域 -->
       <div style="padding: 15px;">
         <a href="/addArtlist" class="layui-btn layui-bg-blue">+</a>
-        <table class="layui-hide" id="artlist" lay-filter="test"></table>
+        <!-- 搜索 -->
+        <div class="search">
+          <div class="layui-form-item" style="display:flex;align-items: center;">
+            <div class="layui-input-block">
+              <input type="text" id="keyword" autocomplete="off" placeholder="请输入标题" class="layui-input">
+            </div>
+            <button type="button" class="layui-btn layui-btn-sm layui-btn-normal" id="search" style="height: 100%;">搜索</button>
+          </div>
+        </div>
+        <table class="layui-hide" id="artlist" lay-filter="searchKey"></table>
       </div>
+      <!-- 搜索 -->
     </div>
   </div>
   <script src="../assets/js/lightbox.min.js "></script>
   <script>
     layui.use('table', function () {
       var table = layui.table;
+      $("#search").on('click', () => {
+        // 1. 获取关键字
+        let keyword = $("#keyword").val()
+        table.reload('artlist', {
+           //设定异步数据接口的额外参数
+           where:{keyword}
+        });
+      })
+
       table.render({
         elem: '#artlist'
         , url: '/artlists'
@@ -42,8 +60,8 @@
           }
           , {
             field: '', title: '内容', templet: (data) => {
-              let mydata = JSON.stringify(data)
-              return `<a href="javascript:;" onclick='openPo(${mydata})'>预览内容</a>`
+              let myData = JSON.stringify(data)
+              return `<a href="javascript:;" onclick='openPo(${myData})'>预览内容</a>`
             }
           }
           , { field: 'username', title: '发布者', sort: true }
@@ -64,13 +82,14 @@
           prev: '上一页',
           next: '下一页'
         }
+        
       });
 
       table.on('tool(test)', function (obj) {
         var data = obj.data;
         if (obj.event === 'del') {
           layer.confirm('真的删除行么', async function (index) {
-            const {code,msg} = await $.post('/delArtData?id='+ data.id);
+            const { code, msg } = await $.post('/delArtData?id=' + data.id);
             if (code === 0) {
               obj.del();
               layer.msg(msg);
@@ -78,15 +97,14 @@
             layer.close(index);
           });
         } else {
-          location.href = '/editArtlist?id='+ data.id;
-          return; 
+          location.href = '/editArtlist?id=' + data.id;
+          return;
         }
       });
 
-    });
 
-    function openPo(mydata) {
-      let { title, content, add_date, username } = mydata;
+      function openPo(myData) {
+      let { title, content, add_date, username } = myData;
       content = `<div style="padding:15px">
         <h2>${title}</h2>
         <div>${add_date} ${username}</div>
@@ -99,6 +117,7 @@
         area: ['420px', '340px'], //宽高
       });
     }
+    });
   </script>
 </body>
 

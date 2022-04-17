@@ -44,25 +44,12 @@
 
 <!-- 公共头部 -->
 <div class="layui-header" id="header">
-  <div class="layui-logo layui-hide-xs" id="logoText"></div>
+  <div class="layui-nav-item layui-hide layui-show-md-inline-block"
+    style="display: flex!important; align-items: center; justify-content: center; height: 100%; color: #fff; width: 200px;">
+    <img src="" id="logoImg" class="layui-nav-img">
+    <span id="logoText"></span>
+  </div>
   <!-- 头部区域（可配合layui 已有的水平导航） -->
-  <ul class="layui-nav layui-layout-left">
-    <!-- 移动端显示 -->
-    <li class="layui-nav-item layui-show-xs-inline-block layui-hide-sm" lay-header-event="menuLeft">
-      <i class="layui-icon layui-icon-spread-left"></i>
-    </li>
-    <li class="layui-nav-item layui-hide-xs"><a href="">nav 1</a></li>
-    <li class="layui-nav-item layui-hide-xs"><a href="">nav 2</a></li>
-    <li class="layui-nav-item layui-hide-xs"><a href="">nav 3</a></li>
-    <li class="layui-nav-item">
-      <a href="javascript:;">nav groups</a>
-      <dl class="layui-nav-child">
-        <dd><a href="">menu 11</a></dd>
-        <dd><a href="">menu 22</a></dd>
-        <dd><a href="">menu 33</a></dd>
-      </dl>
-    </li>
-  </ul>
   <ul class="layui-nav layui-layout-right">
     <li class="layui-nav-item layui-hide layui-show-md-inline-block">
       <a href="javascript:;">
@@ -145,10 +132,12 @@
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
 <script>
-  let logText = localStorage.getItem('logoText');
+  let { val, pic } = JSON.parse(Cookies.get('logoInfo'));
+  $('#logoImg').attr('src', `upload/${pic}`)
   // 进入页面设置logo
-  $('#logoText').text(logText)
-  $('input[name="name"]').val(logText);
+  $('#logoText').text(val)
+  $('input[name="name"]').val(val);
+  $('#logoImg').attr('src', `upload/${pic}`);
   let userS = JSON.parse(Cookies.get('userInfos'));
   let { id, avatar, intro, username } = userS;
   // 进入页面赋值个人信息&头像
@@ -161,7 +150,7 @@
   let color = Cookies.get('color');
   // 页面加载完毕渲染主题
   window.onload = () => {
-    $('#setName').val(logText);
+    $('#setName').val(val);
     if (color) {
       $('#header').css('background-color', color);
       $('.layui-side-scroll').css('background-color', color);
@@ -180,15 +169,15 @@
   // 头像回显base64
   let picFile;
   let imgSrc;
- 
+  let isImg = 0;
   function fileChange(ele, img) {
     picFile = ele.files[0];// 图片二进制
     const fileReader = new FileReader();
     fileReader.readAsDataURL(picFile);
     fileReader.onload = function (e) {
       $(img).attr('src', e.target.result);
-      imgSrc =  picFile.name;
-      // console.dir(picFile.name);
+      imgSrc = picFile.name;
+      isImg = 1;
     }
   }
   let logoText = document.getElementById('logoText');
@@ -277,4 +266,9 @@
     })
   })
 
+  // logo图片
+  // async function getLogoImg() {
+  //   let result = await $.get('/getLogoImg');
+  // }
+  // getLogoImg();
 </script>
